@@ -7,7 +7,7 @@ name: build
 on:
   push:
     branches:
-      - build_k
+      - dev_k
     paths:
       - 'packages/flutter/**'
 
