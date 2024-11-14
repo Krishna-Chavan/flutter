@@ -62,10 +62,10 @@ jobs:
           echo "export PATH=$PATH:/opt/gradle/bin" >> ~/.bashrc
           source ~/.bashrc
 
-      # Step 8: Build the APK (assembleRelease is equivalent to flutter build apk --release)
+      # Step 8: Navigate to the Flutter project directory and build the APK
       - name: Build APK
         run: |
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE  # Ensure we're in the root of the repository (where pubspec.yaml is)
           flutter doctor
           flutter build apk --release
 
