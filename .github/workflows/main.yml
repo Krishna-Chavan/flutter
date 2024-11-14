@@ -1,0 +1,47 @@
+# Copyright 2013 The Flutter Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+name: coverage
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/flutter/**'
+
+permissions: read-all
+
+jobs:
+  build:
+    name: coverage
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'flutter/flutter' }}
+    steps:
+      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+      
+      # Add the Flutter setup step here
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.7.0'  # Specify the version you want to use
+
+      # Install dependencies for Flutter project
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Build the project (you can add more specific build commands here if needed)
+      - name: Build the Flutter project
+        run: flutter build apk --release
+
+      # Run tests and generate coverage
+      - name: ./bin/flutter test --coverage
+        run: pushd packages/flutter;../../bin/flutter test --coverage -j 1;popd
+
+      # Upload coverage to codecov
+      - name: Upload coverage
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238
+        with:
+          files: packages/flutter/coverage/lcov.info
+          verbose: true
